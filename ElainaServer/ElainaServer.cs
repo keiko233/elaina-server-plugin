@@ -34,6 +34,7 @@ public class ElainaServer : BasePlugin
 		new InfiniteGrenadeMode(),
 		new SwapPositionsOnHitMode(),
 		new ChangeWeaponOnShootMode(),
+		new DropWeaponOnShootMode(),
 	];
 
 	[GameEventHandler]
