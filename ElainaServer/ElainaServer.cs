@@ -33,6 +33,7 @@ public class ElainaServer : BasePlugin
 		new TaserWithBhopMode(),
 		new InfiniteGrenadeMode(),
 		new SwapPositionsOnHitMode(),
+		new ChangeWeaponOnShootMode(),
 	];
 
 	[GameEventHandler]
