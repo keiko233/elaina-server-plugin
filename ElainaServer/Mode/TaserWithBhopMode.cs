@@ -10,6 +10,7 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 	public TaserWithBhopMode() : this(null!)
 	{
 	}
+
 	private float MpTaserRechargeTime = 0;
 	private bool MpEnableBunnyhopping = false;
 	private bool MpAutoBunnyhopping = false;
@@ -21,7 +22,6 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
-
 		MpTaserRechargeTime = ConVar.Find("mp_taser_recharge_time")!.GetPrimitiveValue<float>();
 		MpEnableBunnyhopping = ConVar.Find("sv_enablebunnyhopping")!.GetPrimitiveValue<Boolean>();
 		MpAutoBunnyhopping = ConVar.Find("sv_autobunnyhopping")!.GetPrimitiveValue<Boolean>();
