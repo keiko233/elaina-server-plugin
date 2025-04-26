@@ -32,6 +32,7 @@ public class ElainaServer : BasePlugin
 		new PlantC4AnywhereMode(),
 		new TaserWithBhopMode(),
 		new InfiniteGrenadeMode(),
+		new SwapPositionsOnHitMode(),
 	];
 
 	[GameEventHandler]
