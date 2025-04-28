@@ -1,7 +1,4 @@
-using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
-using CounterStrikeSharp.API.Modules.Utils;
 
 namespace ElainaServer;
 
@@ -18,35 +15,18 @@ public class ChangeWeaponOnShootMode(BaseMode plugin) : BaseMode(plugin)
 	private readonly BasePlugin.GameEventHandler<EventBulletImpact> EventBulletImpactHandler = (@event, info) =>
 	{
 		if (@event.Userid == null) return HookResult.Continue;
+		var player = @event.Userid.OriginalControllerOfCurrentPawn.Get();
 
-		var player = @event.Userid!.OriginalControllerOfCurrentPawn.Get();
-		var pawn = player!.PlayerPawn.Get();
+		PlayerUtils playerUtils = new(player);
 
-		var currentWeapon = pawn!.WeaponServices!.ActiveWeapon.Get();
-		if (currentWeapon is null) return HookResult.Continue;
-		if (WeaponUtils.IgnoreWeapons.Contains(currentWeapon.DesignerName))
-			return HookResult.Continue;
-
-		CsItem randomWeapon = WeaponUtils.GetRandomWeapon();
-
-		player!.DropActiveWeapon();
-
-		player!.GiveNamedItem(randomWeapon);
-		Server.NextFrame(() =>
-		{
-			currentWeapon!.Remove();
-			if (pawn!.WeaponServices!.ActiveWeapon.Get() is null)
-			{
-				player!.GiveNamedItem(CsItem.Knife);
-			}
-		});
+		playerUtils.DropAndChangeWeapon(WeaponUtils.GetRandomWeapon());
 
 		return HookResult.Continue;
 	};
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
-		plugin.RegisterEventHandler<EventBulletImpact>(EventBulletImpactHandler);
+		plugin.RegisterEventHandler(EventBulletImpactHandler);
 	}
 
 	public override void OnModeUnload(ElainaServer plugin)

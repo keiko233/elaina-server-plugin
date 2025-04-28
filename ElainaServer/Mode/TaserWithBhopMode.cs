@@ -1,3 +1,4 @@
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Modules.Cvars;
 
 namespace ElainaServer;
@@ -18,10 +19,24 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 	private float MpMaxVelocity = 0;
 	private float MpMaxSpeed = 0;
 	private float MpStaminaJumpCost = 0;
-	private int SvBuyStatusOverride = 0;
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
+		var Allplayers = Utilities.GetPlayers();
+
+		foreach (var player in Allplayers)
+		{
+			var originPlayer = player!.OriginalControllerOfCurrentPawn.Get()!;
+			if (originPlayer is null) continue;
+
+			PlayerUtils playerUtils = new (originPlayer);
+
+			playerUtils.DropAllWeapons();
+			playerUtils.GiveZeus();
+		}
+
+		BuyServiceUtils.DisableBuyService();
+
 		MpTaserRechargeTime = ConVar.Find("mp_taser_recharge_time")!.GetPrimitiveValue<float>();
 		MpEnableBunnyhopping = ConVar.Find("sv_enablebunnyhopping")!.GetPrimitiveValue<Boolean>();
 		MpAutoBunnyhopping = ConVar.Find("sv_autobunnyhopping")!.GetPrimitiveValue<Boolean>();
@@ -29,7 +44,6 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 		MpMaxVelocity = ConVar.Find("sv_maxvelocity")!.GetPrimitiveValue<float>();
 		MpMaxSpeed = ConVar.Find("sv_maxspeed")!.GetPrimitiveValue<float>();
 		MpStaminaJumpCost = ConVar.Find("sv_staminajumpcost")!.GetPrimitiveValue<float>();
-		SvBuyStatusOverride = ConVar.Find("sv_buy_status_override")!.GetPrimitiveValue<Int32>();
 
 		ConVar.Find("mp_taser_recharge_time")!.SetValue(0f);
 		ConVar.Find("sv_enablebunnyhopping")!.SetValue(true);
@@ -38,11 +52,12 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 		ConVar.Find("sv_maxvelocity")!.SetValue(99999f);
 		ConVar.Find("sv_maxspeed")!.SetValue(99999f);
 		ConVar.Find("sv_staminajumpcost")!.SetValue(0f);
-		ConVar.Find("sv_buy_status_override")!.SetValue(3);
 	}
 
 	public override void OnModeUnload(ElainaServer plugin)
 	{
+		BuyServiceUtils.EnableBuyService();
+
 		ConVar.Find("mp_taser_recharge_time")!.SetValue(MpTaserRechargeTime);
 		ConVar.Find("sv_enablebunnyhopping")!.SetValue(MpEnableBunnyhopping);
 		ConVar.Find("sv_autobunnyhopping")!.SetValue(MpAutoBunnyhopping);
@@ -50,6 +65,5 @@ public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 		ConVar.Find("sv_maxvelocity")!.SetValue(MpMaxVelocity);
 		ConVar.Find("sv_maxspeed")!.SetValue(MpMaxSpeed);
 		ConVar.Find("sv_staminajumpcost")!.SetValue(MpStaminaJumpCost);
-		ConVar.Find("sv_buy_status_override")!.SetValue(SvBuyStatusOverride);
 	}
 }

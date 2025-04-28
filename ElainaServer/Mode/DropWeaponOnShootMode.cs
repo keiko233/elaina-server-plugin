@@ -9,17 +9,15 @@ public class DropWeaponOnShootMode(BaseMode plugin) : BaseMode(plugin)
 	public override string ModeName => "Drop Weapon On Shoot Mode";
 	public override string ModeDescription => "When you shoot, your weapon will drop.";
 
-	private BasePlugin.GameEventHandler<EventBulletImpact> EventBulletImpactHandler = (@event, info) =>
+	private readonly BasePlugin.GameEventHandler<EventBulletImpact> EventBulletImpactHandler = (@event, info) =>
 		{
 			var player = @event.Userid!.OriginalControllerOfCurrentPawn.Get();
 			var pawn = player!.PlayerPawn.Get();
 
-			var currentWeapon = pawn!.WeaponServices!.ActiveWeapon.Get();
-			if (currentWeapon is null) return HookResult.Continue;
-			if (WeaponUtils.IgnoreWeapons.Contains(currentWeapon.DesignerName))
-				return HookResult.Continue;
+			PlayerUtils playerUtils = new(player);
 
-			player!.DropActiveWeapon();
+			playerUtils.DropWeapon();
+
 			Server.NextFrame(() =>
 			{
 				if (pawn!.WeaponServices!.ActiveWeapon.Get() is null)

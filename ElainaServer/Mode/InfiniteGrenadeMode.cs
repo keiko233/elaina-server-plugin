@@ -55,7 +55,8 @@ public class InfiniteGrenadeMode(BaseMode plugin) : BaseMode(plugin)
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
-		plugin.RegisterEventHandler<EventRoundStart>(EventRoundStartHandler);
+		plugin.RegisterEventHandler(EventRoundStartHandler);
+		BuyServiceUtils.DisableBuyService();
 
 		SvBuyStatusOverride = ConVar.Find("sv_buy_status_override")!.GetPrimitiveValue<Int32>();
 		MpAutokick = ConVar.Find("mp_autokick")!.GetPrimitiveValue<bool>();
@@ -67,8 +68,6 @@ public class InfiniteGrenadeMode(BaseMode plugin) : BaseMode(plugin)
 		MpWeaponsAllowSmgs = ConVar.Find("mp_weapons_allow_smgs")!.GetPrimitiveValue<Int32>();
 		MpWeaponsAllowHeavy = ConVar.Find("mp_weapons_allow_heavy")!.GetPrimitiveValue<Int32>();
 
-		// 3 is disabled buy menu for anyone
-		ConVar.Find("sv_buy_status_override")!.SetValue(3);
 		ConVar.Find("mp_autokick")!.SetValue(false);
 		ConVar.Find("sv_infinite_ammo")!.SetValue(1);
 		ConVar.Find("ammo_grenade_limit_total")!.SetValue(10);
@@ -78,15 +77,14 @@ public class InfiniteGrenadeMode(BaseMode plugin) : BaseMode(plugin)
 		ConVar.Find("mp_weapons_allow_smgs")!.SetValue(0);
 		ConVar.Find("mp_weapons_allow_heavy")!.SetValue(0);
 
-
 		GiveAllPlayersGrenades();
 	}
 
 	public override void OnModeUnload(ElainaServer plugin)
 	{
-		plugin.DeregisterEventHandler<EventRoundStart>(EventRoundStartHandler);
+		plugin.DeregisterEventHandler(EventRoundStartHandler);
+		BuyServiceUtils.EnableBuyService();
 
-		ConVar.Find("sv_buy_status_override")!.SetValue(SvBuyStatusOverride);
 		ConVar.Find("mp_autokick")!.SetValue(MpAutokick);
 		ConVar.Find("sv_infinite_ammo")!.SetValue(SvInfiniteAmmo);
 		ConVar.Find("ammo_grenade_limit_total")!.SetValue(AmmoGrenadeLimitTotal);

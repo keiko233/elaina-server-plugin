@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core.Translations;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace ElainaServer;
@@ -15,14 +16,6 @@ public class ElainaServer : BasePlugin
 	public override string ModuleVersion => "1.0.0";
 	public override string ModuleAuthor => "keiko233";
 	public override string ModuleDescription => "Elaina Server Plugin";
-
-	public override void Load(bool hotReload)
-	{
-		Logger.LogInformation("ElainaServer Plugin Loaded!");
-	}
-
-	private BaseMode? PendingMode = null;
-	private bool IsRandomModeEnabled = false;
 
 	private readonly List<BaseMode> ModeLists = [
 		new HighHealthOnlyKnifeMode(),
@@ -37,36 +30,83 @@ public class ElainaServer : BasePlugin
 		new DropWeaponOnShootMode(),
 	];
 
-	[GameEventHandler]
-	public HookResult OnRoundStart(EventRoundStart @event, GameEventInfo info)
+	public override void Load(bool hotReload)
 	{
-		if (!IsRandomModeEnabled) return HookResult.Continue;
+		Logger.LogInformation("ElainaServer Plugin Loaded!");
+	}
 
-		// Unload any previous mode
+	private BaseMode? PendingMode = null;
+	private BaseMode? NextMode = null;
+
+	private bool IsRandomModeEnabled = false;
+
+	[GameEventHandler]
+	public HookResult OnRoundStart(EventGameEnd @event, GameEventInfo info)
+	{
 		if (PendingMode != null)
 		{
 			PendingMode.OnModeUnload(this);
 			PendingMode = null;
 		}
 
-		// Get random mode, avoiding the previously selected one
-		Random random = new();
-		int randomIndex;
+		return HookResult.Continue;
+	}
 
-		do
+	[GameEventHandler]
+	public HookResult OnRoundPrestart(EventRoundPrestart @event, GameEventInfo info)
+	{
+		if (!IsRandomModeEnabled) return HookResult.Continue;
+
+		// Set the next round mode to the current mode
+		if (NextMode != null)
 		{
-			randomIndex = random.Next(0, ModeLists.Count);
-		} while
-			(ModeLists.Count > 1 && PendingMode != null && randomIndex == ModeLists.IndexOf(PendingMode));
+			PendingMode = NextMode;
+			NextMode = null;
+		}
+		else
+		{
+			// Randomly select a mode when first running or NextMode is null
+			Random random = new();
+			int randomIndex = random.Next(0, ModeLists.Count);
+			PendingMode = ModeLists[randomIndex];
+		}
 
-		// Activate the new mode
-		PendingMode = ModeLists[randomIndex];
-		PendingMode.OnModeLoad(this);
-		PendingMode.PrintModeDescriptionToChatAll(this);
+		// Load the pending mode
+		if (PendingMode != null)
+		{
+			PendingMode.OnModeLoad(this);
+			PendingMode.PrintModeDescriptionToChatAll(this);
+		}
+
+		// Randomly select a new mode for the next round, avoiding the same mode as the current one
+		if (ModeLists.Count > 1)
+		{
+			Random random = new();
+			int randomIndex;
+
+			do
+			{
+				randomIndex = random.Next(0, ModeLists.Count);
+			} while (PendingMode != null && randomIndex == ModeLists.IndexOf(PendingMode));
+
+			NextMode = ModeLists[randomIndex];
+			Server.PrintToConsole($"Next mode: {NextMode.ModeName}");
+		}
 
 		return HookResult.Continue;
 	}
 
+	[GameEventHandler]
+	public HookResult OnRoundEnd(EventRoundEnd @event, GameEventInfo info)
+	{
+		if (PendingMode != null)
+		{
+			PendingMode.OnModeUnload(this);
+			PendingMode = null;
+		}
+
+		return HookResult.Stop;
+	}
 
 	[GameEventHandler]
 	public HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
@@ -75,7 +115,7 @@ public class ElainaServer : BasePlugin
 
 		var playerName = @event.Userid.PlayerName;
 
-		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{{GREEN}}[{ModuleName}] {{WHITE}}Hello {playerName}, Welcome to {ModuleName}!"));
+		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{ChatColors.Green}[{ModuleName}] {ChatColors.White}Hello {playerName}, Welcome to {ModuleName}!"));
 
 		return HookResult.Stop;
 	}
@@ -122,6 +162,20 @@ public class ElainaServer : BasePlugin
 		PendingMode.PrintModeDescriptionToChatAll(this);
 	}
 
+	[ConsoleCommand("css_next_mode", "Load next random mode")]
+	[CommandHelper(minArgs: 1, usage: "<index>", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
+	[RequiresPermissions("@css/root")]
+	public void OnNextRandomModeCommand(CCSPlayerController? player, CommandInfo commandInfo)
+	{
+		_ = int.TryParse(commandInfo.GetArg(1), out int index);
+
+		if (index < 0 || index >= ModeLists.Count) { return; }
+		NextMode = ModeLists[index];
+		if (NextMode == null) { return; }
+
+		commandInfo.ReplyToCommand($"Next mode: {NextMode.ModeName}");
+	}
+
 	[ConsoleCommand("css_unload_mode", "Unload random mode")]
 	[CommandHelper(minArgs: 0, usage: "", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
 	[RequiresPermissions("@css/root")]
@@ -143,6 +197,7 @@ public class ElainaServer : BasePlugin
 	public void OnEnableRandomModeCommand(CCSPlayerController? player, CommandInfo commandInfo)
 	{
 		IsRandomModeEnabled = true;
+		commandInfo.ReplyToCommand($"Random mode: {IsRandomModeEnabled}");
 	}
 
 	[ConsoleCommand("css_disable_random_mode", "Disable random mode")]
@@ -151,5 +206,6 @@ public class ElainaServer : BasePlugin
 	public void OnDisableRandomModeCommand(CCSPlayerController? player, CommandInfo commandInfo)
 	{
 		IsRandomModeEnabled = false;
+		commandInfo.ReplyToCommand($"Random mode: {IsRandomModeEnabled}");
 	}
 }

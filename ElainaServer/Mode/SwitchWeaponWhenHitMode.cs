@@ -1,6 +1,5 @@
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities.Constants;
 
 namespace ElainaServer;
 
@@ -20,32 +19,9 @@ public class SwitchWeaponWhenHitMode(BaseMode plugin) : BaseMode(plugin)
 
 		foreach (var player in Allplayers)
 		{
-			if (player == null || !player.IsValid) continue;
+			PlayerUtils playerUtils = new(player);
 
-			var originPlayer = player!.OriginalControllerOfCurrentPawn.Get()!;
-			if (originPlayer is null) continue;
-			CCSPlayerPawn? pawn = originPlayer.PlayerPawn.Get();
-			if (pawn is null) continue;
-			if (!pawn!.IsValid) continue;
-
-			var currentWeapon = pawn!.WeaponServices!.ActiveWeapon.Get();
-			if (currentWeapon is null) return HookResult.Continue;
-			if (WeaponUtils.IgnoreWeapons.Contains(currentWeapon.DesignerName))
-				return HookResult.Continue;
-
-			originPlayer!.DropActiveWeapon();
-
-			CsItem csItem = WeaponUtils.GetRandomWeapon();
-
-			Server.NextFrame(() =>
-			{
-				originPlayer!.GiveNamedItem(csItem);
-				currentWeapon!.Remove();
-				if (pawn!.WeaponServices!.ActiveWeapon.Get() is null)
-				{
-					originPlayer!.GiveNamedItem(CsItem.Knife);
-				}
-			});
+			playerUtils.DropAndChangeWeapon(WeaponUtils.GetRandomWeapon());
 		}
 
 		return HookResult.Continue;
@@ -79,7 +55,6 @@ public class SwitchWeaponWhenHitMode(BaseMode plugin) : BaseMode(plugin)
 				victimPawn.RemovePlayerItem(victimWeapon);
 				attackerPawn.RemovePlayerItem(attackerWeapon);
 
-
 				victim.GiveNamedItem(attackerWeaponName);
 				attacker.GiveNamedItem(victimWeaponName);
 			});
@@ -93,13 +68,13 @@ public class SwitchWeaponWhenHitMode(BaseMode plugin) : BaseMode(plugin)
 		// try to give random weapon to all players
 		GiveRandomWeaponForEveryone();
 
-		plugin.RegisterEventHandler<EventRoundStart>(EventRoundStartHandler);
-		plugin.RegisterEventHandler<EventPlayerHurt>(EventPlayerHurtHandler);
+		plugin.RegisterEventHandler(EventRoundStartHandler);
+		plugin.RegisterEventHandler(EventPlayerHurtHandler);
 	}
 
 	public override void OnModeUnload(ElainaServer plugin)
 	{
-		plugin.DeregisterEventHandler(EventPlayerHurtHandler, HookMode.Post);
-		plugin.DeregisterEventHandler(EventRoundStartHandler, HookMode.Post);
+		plugin.DeregisterEventHandler(EventPlayerHurtHandler);
+		plugin.DeregisterEventHandler(EventRoundStartHandler);
 	}
 }

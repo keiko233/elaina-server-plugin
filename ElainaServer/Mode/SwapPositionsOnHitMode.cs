@@ -39,7 +39,7 @@ public class SwapPositionsOnHitMode(BaseMode plugin) : BaseMode(plugin)
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
-		plugin.RegisterEventHandler<EventPlayerHurt>(EventPlayerHurtHandler);
+		plugin.RegisterEventHandler(EventPlayerHurtHandler);
 	}
 
 	public override void OnModeUnload(ElainaServer plugin)

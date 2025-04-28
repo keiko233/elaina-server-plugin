@@ -16,15 +16,10 @@ public class HighHealthOnlyKnifeMode(BaseMode plugin) : BaseMode(plugin)
 	}
 
 	private const int HEALTH = 10000;
-	private int PrimitiveSvBuyStatusOverride = 0;
-	private readonly Random random = new();
+    private readonly Random random = new();
 
 	public override void OnModeLoad(ElainaServer plugin)
 	{
-		PrimitiveSvBuyStatusOverride = ConVar.Find("sv_buy_status_override")!.GetPrimitiveValue<Int32>();
-		// 3 is disabled buy menu for anyone
-		ConVar.Find("sv_buy_status_override")!.SetValue(3);
-
 		List<CCSPlayerController> Allplayers = Utilities.GetPlayers();
 
 		var ctPlayers = new List<CCSPlayerController>();
@@ -77,8 +72,6 @@ public class HighHealthOnlyKnifeMode(BaseMode plugin) : BaseMode(plugin)
 
 	public override void OnModeUnload(ElainaServer plugin)
 	{
-		ConVar.Find("sv_buy_status_override")!.SetValue(PrimitiveSvBuyStatusOverride);
-
 		List<CCSPlayerController> Allplayers = Utilities.GetPlayers();
 
 		foreach (var player in Allplayers)
