@@ -1,0 +1,30 @@
+name: Build CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Restore dependencies
+        run: dotnet restore --configfile NuGet.conf
+
+      - name: Build
+        working-directory: ElainaServer
+        run: dotnet build --no-restore -c Release
+
+      - name: Upload Github Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ElainaServerPlugin
+          path: ./ElainaServer/bin/Release/net8.0/**/*
