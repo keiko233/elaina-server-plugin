@@ -5,8 +5,7 @@ namespace ElainaServer;
 
 public class SwitchWeaponWhenHitMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Use Your Opponent's Weapon When Hit Mode";
-	public override string ModeDescription => "When you hit your opponent, exchange weapons with him";
+	public override string ModeLocalizerId => "switch_weapon_when_hit";
 
 	public SwitchWeaponWhenHitMode() : this(null!)
 	{

@@ -12,6 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="..\lang\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="`lang\**\*.*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

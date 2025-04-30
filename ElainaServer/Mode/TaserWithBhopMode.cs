@@ -5,8 +5,7 @@ namespace ElainaServer;
 
 public class TaserWithBhopMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Zenus Bhop";
-	public override string ModeDescription => "In this mode, the taser has no cooldown, and you can use KZ boost jumps!";
+	public override string ModeLocalizerId => "taser_with_bhop";
 
 	public TaserWithBhopMode() : this(null!)
 	{

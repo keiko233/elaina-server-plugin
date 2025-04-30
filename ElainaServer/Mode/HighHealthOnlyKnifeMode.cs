@@ -9,8 +9,8 @@ namespace ElainaServer;
 
 public class HighHealthOnlyKnifeMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "High Health Only Knife Mode";
-	public override string ModeDescription => "One player from each team gets 10000 HP, everyone only knife";
+	public override string ModeLocalizerId => "high_health_only_knife";
+
 	public HighHealthOnlyKnifeMode() : this(null!)
 	{
 	}

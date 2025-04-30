@@ -1,13 +1,12 @@
 using CounterStrikeSharp.API.Core.Translations;
 using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Modules.Utils;
 
 namespace ElainaServer;
 
 public abstract class BaseMode
 {
-	abstract public string ModeName { get; }
-	abstract public string ModeDescription { get; }
-
+	public abstract string ModeLocalizerId { get; }
 	public BaseMode(ElainaServer plugin)
 	{
 		RegisterCommand(plugin);
@@ -23,6 +22,10 @@ public abstract class BaseMode
 
 	public virtual void PrintModeDescriptionToChatAll(ElainaServer plugin)
 	{
-		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{{GREEN}}[{plugin.ModuleName}] {{RED}}[{ModeName}]{{WHITE}}: {ModeDescription}"));
+		var name = plugin.Localizer[$"mode.{ModeLocalizerId}.name"];
+		var description = plugin.Localizer[$"mode.{ModeLocalizerId}.description"];
+		var prefix = $"{ChatColors.Green}[{plugin.ModuleName}] {ChatColors.Red}[{name}]";
+
+		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{prefix}{{WHITE}}: {description}"));
 	}
 }

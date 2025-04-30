@@ -6,9 +6,7 @@ namespace ElainaServer;
 
 public class SwapPositionsOnHitMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Swap Positions On Hit";
-
-	public override string ModeDescription => "Swaps the positions of the two players when one of them is hit.";
+	public override string ModeLocalizerId => "swap_positions_on_hit";
 
 	public SwapPositionsOnHitMode() : this(null!)
 	{

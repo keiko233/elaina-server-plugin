@@ -4,8 +4,7 @@ namespace ElainaServer;
 
 public class PlantC4AnywhereMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Plant C4 Anywhere Mode";
-	public override string ModeDescription => $"You can plant the bomb anywhere, but heads up — the C4 timer is extended to {ExtendedC4timer} seconds. Good luck!";
+	public override string ModeLocalizerId => "plant_c4_anywhere";
 
 	public PlantC4AnywhereMode() : this(null!)
 	{

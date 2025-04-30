@@ -50,7 +50,7 @@ public class PlayerUtils
 		Server.NextFrame(() =>
 		{
 			// then remove the current weapon
-			currentWeapon!.Remove();
+			currentWeapon?.Remove();
 			if (GetCurrentWeapon() is null)
 			{
 				player.GiveNamedItem(CsItem.Knife);

@@ -4,7 +4,6 @@ using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core.Translations;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace ElainaServer;
@@ -90,7 +89,8 @@ public class ElainaServer : BasePlugin
 			} while (PendingMode != null && randomIndex == ModeLists.IndexOf(PendingMode));
 
 			NextMode = ModeLists[randomIndex];
-			Server.PrintToConsole($"Next mode: {NextMode.ModeName}");
+			var name = Localizer[$"mode.{NextMode.ModeLocalizerId}.name"];
+			Server.PrintToConsole($"Next mode: {name}");
 		}
 
 		return HookResult.Continue;
@@ -113,9 +113,13 @@ public class ElainaServer : BasePlugin
 	{
 		if (@event.Userid == null) { return HookResult.Stop; }
 
-		var playerName = @event.Userid.PlayerName;
+		// ref: https://github.com/roflmuffin/CounterStrikeSharp/issues/846
+		// var steamId = (CounterStrikeSharp.API.Modules.Entities.SteamID)@event.Userid.SteamID;
+		// PlayerLanguageManager playerLanguage = new();
+		// playerLanguage.SetLanguage(steamId, new System.Globalization.CultureInfo("zh"));
 
-		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{ChatColors.Green}[{ModuleName}] {ChatColors.White}Hello {playerName}, Welcome to {ModuleName}!"));
+		var playerName = @event.Userid.PlayerName;
+		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{{GREEN}}[{ModuleName}] {{WHITE}}Hello {playerName}, Welcome to {ModuleName}!"));
 
 		return HookResult.Stop;
 	}
@@ -140,8 +144,10 @@ public class ElainaServer : BasePlugin
 		for (int i = 0; i < ModeLists.Count; i++)
 		{
 			var currentMode = ModeLists[i];
+			var name = Localizer[$"mode.{currentMode.ModeLocalizerId}.name"];
+			var description = Localizer[$"mode.{currentMode.ModeLocalizerId}.description"];
 
-			commandInfo.ReplyToCommand($"{i} {currentMode.ModeName} {currentMode.ModeDescription}");
+			commandInfo.ReplyToCommand($"[{i}] {name}, {description}");
 		}
 	}
 
@@ -156,7 +162,8 @@ public class ElainaServer : BasePlugin
 		PendingMode = ModeLists[index];
 		if (PendingMode == null) { return; }
 
-		commandInfo.ReplyToCommand($"Loaded mode: {PendingMode.ModeName}");
+		var name = Localizer[$"mode.{PendingMode.ModeLocalizerId}.name"];
+		commandInfo.ReplyToCommand($"Loaded mode: {name}");
 
 		PendingMode.OnModeLoad(this);
 		PendingMode.PrintModeDescriptionToChatAll(this);
@@ -173,7 +180,8 @@ public class ElainaServer : BasePlugin
 		NextMode = ModeLists[index];
 		if (NextMode == null) { return; }
 
-		commandInfo.ReplyToCommand($"Next mode: {NextMode.ModeName}");
+		var name = Localizer[$"mode.{NextMode.ModeLocalizerId}.name"];
+		commandInfo.ReplyToCommand($"Next mode: {name}");
 	}
 
 	[ConsoleCommand("css_unload_mode", "Unload random mode")]
@@ -185,8 +193,9 @@ public class ElainaServer : BasePlugin
 
 		PendingMode.OnModeUnload(this);
 
-		commandInfo.ReplyToCommand($"Unloaded mode: {PendingMode?.ModeName}");
-		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{{GREEN}}[{ModuleName}] {{WHITE}}Unloaded mode: {PendingMode?.ModeName}"));
+		var name = Localizer[$"mode.{PendingMode.ModeLocalizerId}.name"];
+		commandInfo.ReplyToCommand($"Unloaded mode: {name}");
+		Server.PrintToChatAll(StringExtensions.ReplaceColorTags($"{{GREEN}}[{ModuleName}] {{WHITE}}Unloaded mode: {name}"));
 
 		PendingMode = null;
 	}

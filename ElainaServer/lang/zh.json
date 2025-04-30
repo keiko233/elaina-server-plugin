@@ -1,0 +1,22 @@
+{
+	"mode.headshot_only.name": "爆头模式",
+	"mode.headshot_only.description": "只允许爆头击杀，其他部位击杀无伤害。",
+	"mode.change_weapon_on_shoot.name": "射击换武器",
+	"mode.change_weapon_on_shoot.description": "当你射击时，你的武器会随机更换为另一把。",
+	"mode.death_remove_c4.name": "死亡移除C4",
+	"mode.death_remove_c4.description": "当你死亡时，你携带的C4将被移除。",
+	"mode.drop_weapon_on_shoot.name": "射击掉落武器",
+	"mode.drop_weapon_on_shoot.description": "当你射击时，你的武器会被丢弃。",
+	"mode.high_health_only_knife.name": "高血量仅可匕首击杀",
+	"mode.high_health_only_knife.description": "只有当你拥有高血量时，你才能使用匕首击杀。",
+	"mode.infinite_grenade.name": "无限手雷",
+	"mode.infinite_grenade.description": "所有玩家拥有无限手雷！",
+	"mode.plant_c4_anywhere.name": "随处安装C4",
+	"mode.plant_c4_anywhere.description": "你可以在任何地方安装炸弹，但请注意——C4计时器延长至100秒。祝你好运！",
+	"mode.swap_positions_on_hit.name": "击中交换位置",
+	"mode.swap_positions_on_hit.description": "当你击中敌人时，你们的位置会互相交换。",
+	"mode.switch_weapon_when_hit.name": "被击中换武器",
+	"mode.switch_weapon_when_hit.description": "当你被击中时，你的武器会随机更换为另一把。",
+	"mode.taser_with_bhop.name": "电击枪连跳",
+	"mode.taser_with_bhop.description": "在这个模式中，电击枪没有冷却时间，并且你可以使用KZ加速跳跃！"
+}

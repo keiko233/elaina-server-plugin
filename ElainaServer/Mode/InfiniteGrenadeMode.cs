@@ -8,8 +8,7 @@ namespace ElainaServer;
 
 public class InfiniteGrenadeMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Infinite Grenade";
-	public override string ModeDescription => "All players have infinite grenades!";
+	public override string ModeLocalizerId => "infinite_grenade";
 
 	public InfiniteGrenadeMode() : this(null!)
 	{

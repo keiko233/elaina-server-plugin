@@ -4,8 +4,7 @@ namespace ElainaServer;
 
 public class DeathRemoveC4Mode(BaseMode plugin) : BaseMode(plugin)
 {
-    public override string ModeName => "Death Remove C4 Mode";
-    public override string ModeDescription => "Guard the bomb carrier! If they’re dead, no planting!";
+	public override string ModeLocalizerId => "death_remove_c4";
 
     public DeathRemoveC4Mode() : this(null!)
     {

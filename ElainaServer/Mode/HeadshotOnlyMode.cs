@@ -4,8 +4,7 @@ namespace ElainaServer;
 
 public class HeadshotOnlyMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Headshot Only Mode";
-	public override string ModeDescription => "Only headshot kills are allowed, and kills by other parts of the body are invalid.";
+	public override string ModeLocalizerId => "headshot_only";
 
 	public HeadshotOnlyMode() : this(null!)
 	{

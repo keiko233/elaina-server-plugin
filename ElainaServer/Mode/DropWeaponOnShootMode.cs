@@ -6,8 +6,7 @@ namespace ElainaServer;
 
 public class DropWeaponOnShootMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Drop Weapon On Shoot Mode";
-	public override string ModeDescription => "When you shoot, your weapon will drop.";
+	public override string ModeLocalizerId => "drop_weapon_on_shoot";
 
 	private readonly BasePlugin.GameEventHandler<EventBulletImpact> EventBulletImpactHandler = (@event, info) =>
 		{

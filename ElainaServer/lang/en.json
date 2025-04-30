@@ -1,0 +1,22 @@
+{
+	"mode.headshot_only.name": "Headshot Only Mode",
+	"mode.headshot_only.description": "Only headshot kills are allowed, and kills by other parts of the body are invalid.",
+	"mode.change_weapon_on_shoot.name": "Change Weapon on Shoot",
+	"mode.change_weapon_on_shoot.description": "When you shoot, your weapon will change to a random one.",
+	"mode.death_remove_c4.name": "Death Remove C4",
+	"mode.death_remove_c4.description": "When you die, your C4 will be removed.",
+	"mode.drop_weapon_on_shoot.name": "Drop Weapon on Shoot",
+	"mode.drop_weapon_on_shoot.description": "When you shoot, your weapon will be dropped.",
+	"mode.high_health_only_knife.name": "High Health Only Knife",
+	"mode.high_health_only_knife.description": "You can only kill with a knife if you have high health.",
+	"mode.infinite_grenade.name": "Infinite Grenade",
+	"mode.infinite_grenade.description": "All players have infinite grenades!",
+	"mode.plant_c4_anywhere.name": "Plant C4 Anywhere",
+	"mode.plant_c4_anywhere.description": "You can plant the bomb anywhere, but heads up — the C4 timer is extended to 100 seconds. Good luck!",
+	"mode.swap_positions_on_hit.name": "Swap Positions on Hit",
+	"mode.swap_positions_on_hit.description": "When you hit an enemy, your positions will swap.",
+	"mode.switch_weapon_when_hit.name": "Switch Weapon When Hit",
+	"mode.switch_weapon_when_hit.description": "When you get hit, your weapon will change to a random one.",
+	"mode.taser_with_bhop.name": "Taser with Bhop",
+	"mode.taser_with_bhop.description": "In this mode, the taser has no cooldown, and you can use KZ boost jumps!"
+}

@@ -4,9 +4,7 @@ namespace ElainaServer;
 
 public class ChangeWeaponOnShootMode(BaseMode plugin) : BaseMode(plugin)
 {
-	public override string ModeName => "Change Weapon On Shoot";
-
-	public override string ModeDescription => "When you fire, you’ll randomly switch to another weapon. Good luck!";
+	public override string ModeLocalizerId => "change_weapon_on_shoot";
 
 	public ChangeWeaponOnShootMode() : this(null!)
 	{
